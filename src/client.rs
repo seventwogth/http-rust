@@ -4,7 +4,7 @@ use crate::httpconn::build_http_get_request;
 use crate::config::TEST_SERVER_ADDRESS;
 use crate::config::EXAMPLE_SERVER_ADDRESS;
 
-//TEST_CONNECTION (GOOGLE.COM)
+//TEST_CONNECTION (HTTPBIN)
 pub async fn run_example_connection() -> std::io::Result<()> {
     let mut stream = TcpStream::connect(EXAMPLE_SERVER_ADDRESS).await?;
     println!("CONNECTED TO ADDRESS: {}", EXAMPLE_SERVER_ADDRESS);
