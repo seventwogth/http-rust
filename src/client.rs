@@ -12,10 +12,18 @@ pub async fn run_example_connection() -> std::io::Result<()> {
     stream.write_all(request.as_bytes()).await?;
     println!("REQUEST SENT:\n{}", request);
 
-    let mut buffer = Vec::new();
-    stream.read_to_end(&mut buffer).await?;
-    println!("SERVER RESPONSE:\n{}", String::from_utf8_lossy(&buffer));
+    let mut buf = [0u8; 8 * 1024];
 
+    loop {
+        let n = stream.read(&mut buf).await?;
+        if n == 0 {
+            break;
+        }
+        let chunk = &buf[..n];
+        print!("{}", String::from_utf8_lossy(chunk));
+    }
+
+    println!("\nSTREAM COMPLETE");
     Ok(())
 }
 
@@ -27,9 +35,16 @@ pub async fn run_tcp_connection() -> std::io::Result<()> {
     stream.write_all(request.as_bytes()).await?;
     println!("REQUEST SENT:\n{}", request);
 
-    let mut buffer = Vec::new();
-    stream.read_to_end(&mut buffer).await?;
-    println!("SERVER RESPONSE:\n{}", String::from_utf8_lossy(&buffer));
+    let mut buf = [0u8; 8 * 1024];
+    loop {
+        let n = stream.read(&mut buf).await?;
+        if n == 0 {
+            break;
+        }
+        let chunk = &buf[..n];
+        print!("{}", String::from_utf8_lossy(chunk));
+    }
 
+    println!("\nSTREAM COMPLETE");
     Ok(())
 }
